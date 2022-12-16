@@ -1,24 +1,13 @@
 import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/20/solid'
-import {Investment} from "../types";
 import React, {ReactNode, useState} from "react";
 import {currencyFormatter, dateFormatter, percentFormatter} from "../lib";
 import {TableCell} from "./TableCell";
-
-const investments: Investment[] = [
-  {id: '1', company: 'company a', amount: 500000, valuation: 10000000, round: 'seed', date: '2021-11-01', equity: 0.05},
-  {
-    id: '2',
-    company: 'company b',
-    amount: 1000000,
-    valuation: 120000000,
-    round: 'series b',
-    date: '2022-09-20',
-    equity: 0.008
-  },
-]
+import { useInvestments } from "../lib/queries/useInvestments";
 
 export default function Table() {
   const [sortOrder, setSortOrder] = useState({key: 'id', direction: 'desc'})
+
+  const { data: investments } = useInvestments()
 
   const updateSort = (key: string) => {
     if (sortOrder.key === key) {
@@ -77,7 +66,7 @@ export default function Table() {
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                {investments.map((investment) => (
+                {investments?.map((investment) => (
                   <tr key={investment.id}>
                     <TableCell>
                       {investment.id}
