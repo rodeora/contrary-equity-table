@@ -8,3 +8,8 @@ export type Investment = {
   equity: number
   portfolioCompanyId:number
 }
+
+export type SortOrder = {
+  key: string
+  order: string
+}

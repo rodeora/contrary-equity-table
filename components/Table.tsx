@@ -5,15 +5,15 @@ import {TableCell} from "./TableCell";
 import { useInvestments } from "../lib/queries/useInvestments";
 
 export default function Table() {
-  const [sortOrder, setSortOrder] = useState({key: 'id', direction: 'desc'})
+  const [sortOrder, setSortOrder] = useState({key: 'id', order: 'desc'})
 
-  const { data: investments } = useInvestments()
+  const { data: investments } = useInvestments(sortOrder)
 
   const updateSort = (key: string) => {
     if (sortOrder.key === key) {
-      setSortOrder({key, direction: sortOrder.direction === 'asc' ? 'desc' : 'asc'})
+      setSortOrder({key, order: sortOrder.order === 'asc' ? 'desc' : 'asc'})
     } else {
-      setSortOrder({key, direction: 'desc'})
+      setSortOrder({key, order: 'desc'})
     }
   }
 
@@ -21,7 +21,7 @@ export default function Table() {
     if (sortOrder.key === key) {
       return (
         <span className="ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300">
-          {sortOrder.direction === 'asc' ? <ChevronUpIcon className="h-5 w-5"/> : <ChevronDownIcon className="h-5 w-5"/>}
+          {sortOrder.order === 'asc' ? <ChevronUpIcon className="h-5 w-5"/> : <ChevronDownIcon className="h-5 w-5"/>}
         </span>
       )
     }
@@ -41,8 +41,8 @@ export default function Table() {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                 <tr>
-                  <TableHeader onClick={() => updateSort('id')}>
-                    Portfolio Company ID {getSortIcon('id')}
+                  <TableHeader onClick={() => updateSort('portfolioCompanyId')}>
+                    Portfolio Company ID {getSortIcon('portfolioCompanyId')}
                   </TableHeader>
                   <TableHeader onClick={() => updateSort('company')}>
                     Portfolio Company Name {getSortIcon('company')}
@@ -62,7 +62,6 @@ export default function Table() {
                   <TableHeader onClick={() => updateSort('equity')}>
                     Equity Percentage {getSortIcon('equity')}
                   </TableHeader>
-                  <TableHeader />
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
@@ -88,11 +87,6 @@ export default function Table() {
                     </TableCell>
                     <TableCell>
                       {percentFormatter.format(investment.equity)}
-                    </TableCell>
-                    <TableCell>
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edit
-                      </a>
                     </TableCell>
                   </tr>
                 ))}

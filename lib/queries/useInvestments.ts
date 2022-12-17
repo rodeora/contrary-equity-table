@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { Investment } from "../../types";
+import {Investment, SortOrder} from "../../types";
 
-async function getInvestments() : Promise<Investment[]> {
-  return fetch('api/investments').then((res) => res.json());
+async function getInvestments(sortOrder: SortOrder) : Promise<Investment[]> {
+  const params =  new URLSearchParams(sortOrder)
+  return fetch('api/investments?' + params).then((res) => res.json());
 }
-export const useInvestments = () => {
-  return useQuery(['investments'], () => getInvestments())
+export const useInvestments = (sortOrder: SortOrder) => {
+  return useQuery(['investments', sortOrder], () => getInvestments(sortOrder));
 }
