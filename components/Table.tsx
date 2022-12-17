@@ -67,9 +67,9 @@ export default function Table() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                 {investments?.map((investment) => (
-                  <tr key={investment.id}>
+                  <tr key={investment._id}>
                     <TableCell>
-                      {investment.id}
+                      {investment.portfolioCompanyId}
                     </TableCell>
                     <TableCell>
                       {investment.company}
