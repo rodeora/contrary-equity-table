@@ -1,11 +1,12 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import { currencyFormatter, dateFormatter, percentFormatter } from '../lib'
 import { TableCell } from './TableCell'
 import { useInvestments } from '../lib/investments/useInvestments'
+import { TableHeader } from './TableHeader'
 
-export default function Table() {
-  const [sortOrder, setSortOrder] = useState({ key: 'id', order: 'desc' })
+export default function InvestmentTable() {
+  const [sortOrder, setSortOrder] = useState({ key: 'portfolioCompanyId', order: 'asc' })
 
   const { data: investments } = useInvestments(sortOrder)
 
@@ -37,7 +38,7 @@ export default function Table() {
   }
 
   return (
-    <div>
+    <>
       <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-8 overflow-x-auto">
           <div className="inline-block min-w-full py-2 px-8 align-middle">
@@ -96,25 +97,6 @@ export default function Table() {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-const TableHeader = ({
-  children,
-  onClick,
-}: {
-  children?: ReactNode
-  onClick?: () => void
-}) => {
-  return (
-    <th
-      scope="col"
-      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-    >
-      <a href="#" className="group inline-flex" onClick={onClick}>
-        {children}
-      </a>
-    </th>
+    </>
   )
 }

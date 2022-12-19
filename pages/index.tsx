@@ -1,10 +1,22 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Table from '../components/Table'
+import InvestmentTable from '../components/InvestmentTable'
 import { useRouter } from 'next/router'
+import React from 'react'
+import { useInvestments } from '../lib/investments/useInvestments'
+import { currencyFormatter } from '../lib'
 
 export default function Home() {
   const router = useRouter()
+  const { data } = useInvestments()
+  const totalInvested = data?.reduce(
+    (acc, investment) => acc + investment.amount,
+    0,
+  )
+  const totalValue = data?.reduce(
+    (acc, investment) => acc + investment.valuation,
+    0,
+  )
   return (
     <>
       <Head>
@@ -15,19 +27,38 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className="max-w-7xl space-y-8 sm:space-y-5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b-2 border-b-gray-200 pb-5">
             <h2 className="text-3xl font-bold text-gray-900">
               Contrary Portfolio
             </h2>
             <button
               onClick={() => router.push('/newInvestment')}
-              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-800"
             >
               Add Investment
             </button>
           </div>
-
-          <Table />
+          {totalInvested && data && totalValue && (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-center">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Committed Capital: {currencyFormatter.format(totalInvested)}
+                </h3>
+              </div>
+              <div className="flex items-center text-center">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Average Deal Size:{' '}
+                  {currencyFormatter.format(totalInvested / data?.length)}
+                </h3>
+              </div>
+              <div className="flex items-center text-center">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Total Company Value: {currencyFormatter.format(totalValue)}
+                </h3>
+              </div>
+            </div>
+          )}
+          <InvestmentTable />
         </div>
       </main>
     </>

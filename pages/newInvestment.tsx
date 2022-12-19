@@ -15,7 +15,11 @@ export default function NewInvestment() {
 
       <main className={styles.main}>
         <div className="max-w-7xl space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <InvestmentForm />
+          <div className="shadow">
+            <div className="rounded-lg bg-white px-6 py-6">
+              <InvestmentForm />
+            </div>
+          </div>
         </div>
       </main>
     </>

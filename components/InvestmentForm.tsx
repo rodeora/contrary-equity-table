@@ -68,10 +68,8 @@ export default function InvestmentForm() {
   return (
     <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-6 pb-5 sm:space-y-5">
-        <div className="border-b border-gray-200 pb-5">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">
-            New Investment
-          </h3>
+        <div className="border-b border-gray-200 pb-2">
+          <h3 className="text-xl font-medium text-gray-900">New Investment</h3>
         </div>
 
         <div className="space-y-8">
@@ -232,22 +230,20 @@ export default function InvestmentForm() {
         </div>
       </div>
 
-      <div className="pt-5">
-        <div className="flex justify-end">
-          <button
-            onClick={() => onCancel()}
-            type="button"
-            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
-          >
-            Add New Investment
-          </button>
-        </div>
+      <div className="flex justify-end ">
+        <button
+          onClick={() => onCancel()}
+          type="button"
+          className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-800"
+        >
+          Add New Investment
+        </button>
       </div>
     </form>
   )
