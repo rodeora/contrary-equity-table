@@ -18,4 +18,9 @@ export const investmentSchema = yup.object().shape({
     .max(100000000000, 'Valuation must be less than 100 billion')
     .moreThan(yup.ref('amount'), 'Valuation must be greater than the amount'),
   date: yup.date().required('Date is required'),
+});
+
+export const outputSchema = investmentSchema.shape({
+  _id: yup.string().required(),
+  portfolioCompanyId: yup.number().positive().required()
 })

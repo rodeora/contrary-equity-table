@@ -2,18 +2,22 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import InvestmentTable from '../components/InvestmentTable'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { useInvestments } from '../lib/investments/useInvestments'
+import React, { useState } from 'react'
 import { currencyFormatter } from '../lib'
+import { trpc } from '../lib/trpc';
+import { SortOrder } from '../types'
+
 
 export default function Home() {
   const router = useRouter()
-  const { data } = useInvestments()
-  const totalInvested = data?.reduce(
+  const [sortOrder, setSortOrder] = useState<SortOrder>({ key: 'portfolioCompanyId', order: 'asc' })
+
+  const { data: investments } = trpc.getInvestments.useQuery(sortOrder)
+  const totalInvested = investments?.reduce(
     (acc, investment) => acc + investment.amount,
     0,
   )
-  const totalValue = data?.reduce(
+  const totalValue = investments?.reduce(
     (acc, investment) => acc + investment.valuation,
     0,
   )
@@ -38,7 +42,7 @@ export default function Home() {
               Add Investment
             </button>
           </div>
-          {totalInvested && data && totalValue && (
+          {totalInvested && investments && totalValue && (
             <div className="flex items-center justify-between">
               <div className="flex items-center text-center">
                 <h3 className="text-xl font-bold text-gray-900">
@@ -48,7 +52,7 @@ export default function Home() {
               <div className="flex items-center text-center">
                 <h3 className="text-xl font-bold text-gray-900">
                   Average Deal Size:{' '}
-                  {currencyFormatter.format(totalInvested / data?.length)}
+                  {currencyFormatter.format(totalInvested / investments?.length)}
                 </h3>
               </div>
               <div className="flex items-center text-center">
@@ -58,7 +62,9 @@ export default function Home() {
               </div>
             </div>
           )}
-          <InvestmentTable />
+          {investments && (
+            <InvestmentTable investments={investments} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+          )}
         </div>
       </main>
     </>
