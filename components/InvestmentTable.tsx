@@ -1,14 +1,18 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
-import React, { useState } from 'react'
+import React from 'react'
 import { currencyFormatter, dateFormatter, percentFormatter } from '../lib'
 import { TableCell } from './TableCell'
 import { TableHeader } from './TableHeader'
-import { trpc } from '../lib/trpc'
+import { SortOrder } from '../types'
+import { RouterOutputs } from '../lib/trpc'
 
-export default function InvestmentTable() {
-  const [sortOrder, setSortOrder] = useState({ key: 'portfolioCompanyId', order: 'asc' })
+type Props = {
+  investments: RouterOutputs["getInvestments"]
+  sortOrder: SortOrder
+  setSortOrder: React.Dispatch<React.SetStateAction<SortOrder>>
+}
 
-  const { data: investments } = trpc.getInvestments.useQuery(sortOrder)
+export default function InvestmentTable({ investments, sortOrder, setSortOrder }: Props) {
 
   const updateSort = (key: string) => {
     if (sortOrder.key === key) {
