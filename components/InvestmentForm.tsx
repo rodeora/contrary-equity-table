@@ -4,23 +4,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { ErrorMessage } from '@hookform/error-message'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useCreateInvestment } from '../lib/investments/useCreateInvestment'
 import { useRouter } from 'next/router'
 import { NumericFormat } from 'react-number-format'
-import { Investment } from '../types'
 import { investmentSchema } from '../lib/schemas/investment'
+import * as yup from 'yup'
+import { trpc } from '../lib/trpc'
 
-type formInputs = {
-  company: string
-  round: Investment['round']
-  amount: number
-  valuation: number
-  equity: number
-  date: Date
-}
+type formInputs = yup.InferType<typeof investmentSchema>
 
 export default function InvestmentForm() {
   const router = useRouter()
+  const utils = trpc.useUtils();
   const {
     register,
     handleSubmit,
@@ -32,7 +26,7 @@ export default function InvestmentForm() {
 
   const [valuation, amount] = watch(['valuation', 'amount'])
 
-  const { mutate: createInvestment } = useCreateInvestment()
+  const createInvestment = trpc.addInvestment.useMutation();
 
   useEffect(() => {
     if (dirtyFields.valuation && dirtyFields.amount) {
@@ -43,10 +37,13 @@ export default function InvestmentForm() {
   }, [dirtyFields, amount, valuation, setValue])
 
   const onSubmit = (data: formInputs) => {
-    createInvestment(
-      { ...data, date: data.date.toISOString(), equity: data.equity / 100 },
+    createInvestment.mutate(
+      { ...data, equity: data.equity / 100 },
       {
-        onSettled: async () => await router.push('/'),
+        onSettled: async () => {
+          await router.push('/')
+          utils.getInvestments.invalidate();
+        } 
       },
     )
   }

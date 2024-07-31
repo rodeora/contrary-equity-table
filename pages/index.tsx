@@ -3,12 +3,13 @@ import styles from '../styles/Home.module.css'
 import InvestmentTable from '../components/InvestmentTable'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useInvestments } from '../lib/investments/useInvestments'
 import { currencyFormatter } from '../lib'
+import { trpc } from '../lib/trpc';
+
 
 export default function Home() {
   const router = useRouter()
-  const { data } = useInvestments()
+  const { data } = trpc.getInvestments.useQuery({key: '', order: ''})
   const totalInvested = data?.reduce(
     (acc, investment) => acc + investment.amount,
     0,

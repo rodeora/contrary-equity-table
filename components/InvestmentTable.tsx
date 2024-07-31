@@ -2,13 +2,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
 import React, { useState } from 'react'
 import { currencyFormatter, dateFormatter, percentFormatter } from '../lib'
 import { TableCell } from './TableCell'
-import { useInvestments } from '../lib/investments/useInvestments'
 import { TableHeader } from './TableHeader'
+import { trpc } from '../lib/trpc'
 
 export default function InvestmentTable() {
   const [sortOrder, setSortOrder] = useState({ key: 'portfolioCompanyId', order: 'asc' })
 
-  const { data: investments } = useInvestments(sortOrder)
+  const { data: investments } = trpc.getInvestments.useQuery(sortOrder)
 
   const updateSort = (key: string) => {
     if (sortOrder.key === key) {

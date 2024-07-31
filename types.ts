@@ -1,20 +1,7 @@
-export type Investment = {
-  _id: string
-  company: string
-  round:
-    | 'seed'
-    | 'series a'
-    | 'series b'
-    | 'series c'
-    | 'series d'
-    | 'series e'
-    | 'series f'
-  amount: number
-  valuation: number
-  date: string
-  equity: number
-  portfolioCompanyId: number
-}
+import * as yup from 'yup';
+import { outputSchema } from './lib/schemas/investment';
+
+export type Investment = yup.InferType<typeof outputSchema>
 
 export type SortOrder = {
   key: string
